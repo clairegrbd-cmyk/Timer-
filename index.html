@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Timer Sport</title>
+  <meta name="description" content="Chronomètre d'entraînement par intervalles : tours, effort, repos.">
+  <meta name="theme-color" content="#111418">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Timer">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-screen="setup">
+
+  <!-- ===== Écran de réglage ===== -->
+  <main id="setup" class="setup">
+    <header class="top">
+      <h1>Timer</h1>
+      <button id="b-sound" class="icon-btn" aria-pressed="true" aria-label="Son activé" title="Son">
+        <svg viewBox="0 0 24 24" class="ic-on"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 24 24" class="ic-off"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 9.5l5 5m0-5l-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+
+    <section class="fields">
+      <div class="field" data-key="rounds" data-kind="count">
+        <span class="label">Tours</span>
+        <div class="stepper">
+          <button class="step" data-dir="-1" aria-label="Moins de tours">−</button>
+          <output class="value"></output>
+          <button class="step" data-dir="1" aria-label="Plus de tours">+</button>
+        </div>
+      </div>
+      <div class="field work" data-key="work" data-kind="time">
+        <span class="label"><i class="dot"></i>Effort</span>
+        <div class="stepper">
+          <button class="step" data-dir="-1" aria-label="Moins d'effort">−</button>
+          <output class="value"></output>
+          <button class="step" data-dir="1" aria-label="Plus d'effort">+</button>
+        </div>
+      </div>
+      <div class="field rest" data-key="rest" data-kind="time">
+        <span class="label"><i class="dot"></i>Repos</span>
+        <div class="stepper">
+          <button class="step" data-dir="-1" aria-label="Moins de repos">−</button>
+          <output class="value"></output>
+          <button class="step" data-dir="1" aria-label="Plus de repos">+</button>
+        </div>
+      </div>
+      <div class="field prep" data-key="prep" data-kind="time">
+        <span class="label"><i class="dot"></i>Préparation</span>
+        <div class="stepper">
+          <button class="step" data-dir="-1" aria-label="Moins de préparation">−</button>
+          <output class="value"></output>
+          <button class="step" data-dir="1" aria-label="Plus de préparation">+</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="summary">
+      <span class="label">Durée totale</span>
+      <strong id="total">0:00</strong>
+      <span id="total-detail" class="muted"></span>
+    </section>
+
+    <button id="b-start" class="primary">Démarrer</button>
+
+    <section class="presets">
+      <div class="presets-head">
+        <h2>Mes séances</h2>
+        <button id="b-save" class="ghost">+ Enregistrer</button>
+      </div>
+      <ul id="preset-list"></ul>
+      <p id="preset-empty" class="muted" hidden>Aucune séance enregistrée.</p>
+    </section>
+  </main>
+
+  <!-- ===== Écran de séance ===== -->
+  <main id="run" class="run" hidden>
+    <div class="run-top">
+      <span id="r-round">Tour 1/8</span>
+      <span id="r-left">Restant 0:00</span>
+    </div>
+    <div class="run-center">
+      <div id="r-phase">EFFORT</div>
+      <div id="r-time">0:00</div>
+      <div class="bar"><div id="r-bar"></div></div>
+      <div id="r-next"></div>
+    </div>
+    <div class="controls" id="run-controls">
+      <button id="b-stop" class="ctl" aria-label="Arrêter">
+        <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+      </button>
+      <button id="b-pause" class="ctl big" aria-label="Pause">
+        <svg viewBox="0 0 24 24" class="ic-pause"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+        <svg viewBox="0 0 24 24" class="ic-play"><path d="M8 5l11 7-11 7z"/></svg>
+      </button>
+      <button id="b-skip" class="ctl" aria-label="Passer">
+        <svg viewBox="0 0 24 24"><path d="M5 5l9 7-9 7zM16 5h3v14h-3z"/></svg>
+      </button>
+    </div>
+    <div class="controls" id="done-controls" hidden>
+      <button id="b-again" class="pill">Recommencer</button>
+      <button id="b-home" class="pill solid">Terminer</button>
+    </div>
+  </main>
+
+  <!-- ===== Fenêtre d'enregistrement ===== -->
+  <dialog id="d-save">
+    <form method="dialog">
+      <h2>Enregistrer la séance</h2>
+      <p id="d-save-summary" class="muted"></p>
+      <input id="d-save-name" type="text" maxlength="30" placeholder="Nom (ex. Gainage)" autocomplete="off" required>
+      <div class="dialog-actions">
+        <button value="cancel" class="ghost" formnovalidate>Annuler</button>
+        <button value="ok" class="primary small">Enregistrer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
