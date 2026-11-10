@@ -189,7 +189,7 @@
   const LABELS = { prep: 'PRÉPARE-TOI', work: 'EFFORT', rest: 'REPOS', done: 'BRAVO !' };
   const NEXT = { prep: 'Préparation', work: 'Effort', rest: 'Repos' };
   const themeMeta = document.querySelector('meta[name="theme-color"]');
-  const PHASE_COLORS = { prep: '#f59e0b', work: '#22c55e', rest: '#3b82f6', done: '#a855f7' };
+  const PHASE_COLORS = { prep: '#f59e0b', work: '#4ade80', rest: '#3b82f6', done: '#b026ff' };
 
   let run = null;
   let loop = null;

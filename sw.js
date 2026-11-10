@@ -1,5 +1,5 @@
 // Cache hors ligne. Changer VERSION à chaque mise à jour des fichiers.
-const VERSION = 'timer-v1';
+const VERSION = 'timer-v2';
 const FILES = [
   './', 'index.html', 'style.css', 'app.js', 'manifest.webmanifest',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
